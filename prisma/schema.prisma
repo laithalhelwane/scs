@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id          Int        @id @default(autoincrement())
+  phoneNumber String     @unique
+  password    String
+  userName    String     @unique
+  activated   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  client      client?
+  owner       owner?
+  session     session[]
+  location    location[]
+  delivery    delivery[]
+}
+
+model client {
+  user_id     Int        @id
+  user        user       @relation(fields: [user_id], references: [id])
+  order       order[]
+  rate        rate[]
+  favorite    favorite[]
+  clientLevel Int        @default(0)
+}
+
+model servicePrice {
+  id                Int             @id
+  endDate           DateTime
+  clientLevel       Int
+  serviceVariety    service_variety @relation(fields: [service_varietyId], references: [id])
+  service_varietyId Int
+  originalPrice     Float
+  discountPrice     Float
+}
+
+model owner {
+  user_id     Int        @id
+  user        user       @relation(fields: [user_id], references: [id])
+  services    service[]
+  description String?
+  order       order[]
+  favorite    favorite[]
+}
+
+model delivery {
+  user             user            @relation(fields: [userId], references: [id])
+  userId           Int             @unique
+  relativePhNumber String
+  relativeType     String
+  residentLocation String
+  nationality      String
+  vehicleType      String
+  vehicleColor     String
+  vehicleNumber    String
+  online           Boolean         @default(false)
+  orderDelivery    orderDelivery[]
+}
+
+model orderDelivery {
+  id             Int       @id @default(autoincrement())
+  delivery       delivery? @relation(fields: [deliveryUserId], references: [userId])
+  deliveryUserId Int?
+  order          order?    @relation(fields: [orderId], references: [id])
+  orderId        Int?
+}
+
+model location {
+  id             Int     @id @default(autoincrement())
+  name           String
+  longitude      Float
+  latitude       Float
+  cityName       String?
+  streetName     String?
+  zipCode        String?
+  buildingNumber String?
+  description    String?
+  user           user    @relation(fields: [userId], references: [id])
+  userId         Int
+}
+
+model session {
+  id        Int     @id @default(autoincrement())
+  user      user    @relation(fields: [userId], references: [id])
+  userId    Int
+  valid     Boolean @default(true)
+  userAgent String?
+}
+
+model service {
+  id            Int               @id @default(autoincrement())
+  name          String
+  serviceType   Int
+  services      service_variety[]
+  owner         owner             @relation(fields: [ownerUser_id], references: [user_id])
+  ownerUser_id  Int
+  order_service order_service[]
+}
+
+model service_variety {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  service              service                @relation(fields: [serviceId], references: [id])
+  serviceId            Int
+  order_service_detail order_service_detail[]
+  servicePrice         servicePrice[]
+}
+
+model order {
+  id            Int             @id @default(autoincrement())
+  date          DateTime        @default(now())
+  client        client          @relation(fields: [clientUser_id], references: [user_id])
+  clientUser_id Int
+  owner         owner           @relation(fields: [ownerUser_id], references: [user_id])
+  ownerUser_id  Int
+  orderdStatus  orderStatus     @default(wating)
+  order_service order_service[]
+  rate          rate?
+  orderDelivery orderDelivery[]
+}
+
+model order_service {
+  id                   Int                    @id @default(autoincrement())
+  order                order                  @relation(fields: [orderId], references: [id])
+  orderId              Int
+  service              service                @relation(fields: [serviceId], references: [id])
+  serviceId            Int
+  quantity             Int
+  order_service_detail order_service_detail[]
+}
+
+model order_service_detail {
+  id                Int             @id @default(autoincrement())
+  order_service     order_service   @relation(fields: [order_serviceId], references: [id])
+  order_serviceId   Int
+  addtional_service service_variety @relation(fields: [service_varietyId], references: [id])
+  service_varietyId Int
+}
+
+model rate {
+  id            Int    @id @default(autoincrement())
+  client        client @relation(fields: [clientUser_id], references: [user_id])
+  clientUser_id Int
+  order         order  @relation(fields: [orderId], references: [id])
+  orderId       Int    @unique
+  value         Float
+}
+
+model favorite {
+  id            Int      @id @default(autoincrement())
+  client        client   @relation(fields: [clientUser_id], references: [user_id])
+  owner         owner    @relation(fields: [ownerUser_id], references: [user_id])
+  clientUser_id Int
+  ownerUser_id  Int
+  date          DateTime @default(now())
+
+  // TODO: Hey Check me
+  @@unique([clientUser_id, ownerUser_id])
+}
+
+enum orderStatus {
+  wating
+  ok
+}

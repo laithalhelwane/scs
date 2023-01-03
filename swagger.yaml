@@ -1,0 +1,1083 @@
+openapi: 3.0.2
+info:
+  title: SCS
+  description: This document demonstrates the server APIs and how to send/receive data from them.
+  version: '1.0'
+  contact:
+    name: Laith Al-Helwany
+    email: laith.helwany@gmail.com
+    url: https://www.fb.com/laithhelwany
+    x-phone: '00963934189422'
+servers:
+  - url: https://localhost:1337
+    description: For local development
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    CreateClientRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        userName:
+          type: string
+          example: userName
+          minLength: 5
+          maxLength: 20
+        password:
+          type: string
+          example: password
+          format: password
+          minLength: 8
+          maxLength: 32
+      required:
+        - phoneNumber
+        - userName
+        - password
+    CreateClientResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+        phoneNumber:
+          type: string
+          example: 0123456789
+        userName:
+          type: string
+          example: userName
+        activated:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date
+          example: 2022-11-28T08:03:03.337Z
+    UpdateClientRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        userName:
+          type: string
+          example: userName
+          minLength: 5
+          maxLength: 20
+        password:
+          type: string
+          example: password
+          format: password
+          minLength: 8
+          maxLength: 32
+    CreateClientSessionRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        password:
+          type: string
+          example: password
+          format: password
+      required:
+        - phoneNumber
+        - password
+    CreateClientSessionResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          example: 12
+        userId:
+          type: number
+          format: int32
+          example: 2
+        valid:
+          type: boolean
+          example: true
+        userAgent:
+          type: string
+          example: PostmanRuntime/7.29.2
+        accessToken:
+          type: string
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJ1c2VyVHlwZSI6ImMiLCJzZXNzaW9uIjoxMiwiaWF0IjoxNjY5NjI3MzYxLCJleHAiOjE3MDExODQ5NjF9.Ug9HtoEmcegQxavsrz74FBp780Gfnbpqc9LYtsB6j5sAvR0VNRBMR1nzYCd6GSIbXptx6a_eB5PMhsQ3YRx2Y8Bo_qqy--5_Ei6GUAkFGU4AU7nFLpVD5CwVPb501nNc8tssr1TafSO7fB7d4EoQHi6Cok1E0yAVCxzdPVhd1lo
+    CreateOrderRequest:
+      type: object
+      properties:
+        serviceId:
+          type: number
+          format: int32
+          example: 1
+        quantity:
+          type: number
+          format: int32
+          example: 2
+        order_service_detail:
+          type: array
+          items:
+            type: object
+            properties:
+              service_varietyId:
+                type: number
+                format: int32
+                example: 1
+            required:
+              - service_varietyId
+    CreateOrderRateRequest:
+      type: object
+      properties:
+        value:
+          type: number
+          format: int32
+          minimum: 1
+          maximum: 5
+          example: 2
+      required:
+        - value
+    GetClientResponse:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: number
+              format: int32
+              example: 1
+            phoneNumber:
+              type: string
+              example: '012345678'
+            userName:
+              type: string
+              example: 'userName'
+            activated:
+              type: boolean
+              example: true
+        favorite:
+          type: array
+          items:
+            type: object
+            properties:
+              # Todo remeber to add favorite
+              todo:
+                type: string
+        rate:
+          type: array
+          items:
+            type: object
+            properties:
+              # Todo remeber to add rate
+              todo:
+                type: string
+        order:
+          type: array
+          items:
+            type: object
+            properties:
+              # Todo remeber to add order
+              todo:
+                type: string
+    CreateOwnerRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        userName:
+          type: string
+          example: userName
+          minLength: 5
+          maxLength: 20
+        password:
+          type: string
+          example: password
+          format: password
+          minLength: 8
+          maxLength: 32
+        description:
+          type: string
+          example: 'Cool and clean'
+        location:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Home
+            longitude:
+              type: number
+              format: double
+              example: 31.21
+            latitude:
+              type: number
+              format: double
+              example: 31.21
+            cityName:
+              type: string
+              example: 'Makkah'
+            streetName:
+              type: string
+              example: "laith's street"
+            zipCode:
+              type: string
+              example: '0021'
+            buildingNumber:
+              type: string
+              example: 'A21'
+            description:
+              type: string
+              example: 'Near XYZ..'
+          required:
+            - name
+            - longitude
+            - latitude
+            - cityName
+            - streetName
+      required:
+        - phoneNumber
+        - userName
+        - password
+        - location
+    CreateOwnerResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 12
+          format: int32
+        phoneNumber:
+          type: string
+          example: '012345678'
+        userName:
+          type: string
+          example: 'userName'
+        activated:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date
+          example: '2022-11-29T10:51:41.905Z'
+        owner:
+          type: object
+          properties:
+            user_id:
+              type: number
+              format: number
+              example: 12
+            description:
+              type: string
+              example: 'Cool and clean'
+        location:
+          properties:
+            name:
+              type: string
+              example: Home
+            longitude:
+              type: number
+              format: double
+              example: 31.21
+            latitude:
+              type: number
+              format: double
+              example: 31.21
+            cityName:
+              type: string
+              example: 'Makkah'
+            streetName:
+              type: string
+              example: "laith's street"
+            zipCode:
+              type: string
+              example: '0021'
+            buildingNumber:
+              type: string
+              example: 'A21'
+            description:
+              type: string
+              example: 'Near XYZ..'
+            userId:
+              type: number
+              example: 12
+    GetOwnersResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          user_id:
+            type: number
+            format: int32
+            example: 17
+          description:
+            type: string
+            example: 'description'
+          user:
+            type: object
+            properties:
+              userName:
+                type: string
+                example: userName
+              phoneNumber:
+                type: string
+                example: '0000000000'
+              location:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: 'name'
+                  longitude:
+                    type: number
+                    format: double
+                    example: 12.1
+                  latitude:
+                    type: number
+                    format: double
+                    example: -12.1
+                  cityName:
+                    type: string
+                    example: 'cityName'
+                  streetName:
+                    type: string
+                    example: 'name'
+                  zipCode:
+                    type: string
+                    example: 'zipCode'
+                  buildingNumber:
+                    type: string
+                    example: 'buildingNumber'
+                  description:
+                    type: string
+                    example: 'buildingNumber'
+                  userId:
+                    type: number
+                    example: 17
+          services:
+            type: array
+            items:
+              type: string
+              example: 'TBD'
+    CreateServiceRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'T-shirt'
+        serviceType:
+          type: number
+          example: 1
+          enum:
+            - 0
+            - 1
+        services:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: clean
+              price:
+                type: number
+                format: double
+                example: 1.2
+            required:
+              - name
+              - price
+          minLength: 1
+      required:
+        - name
+        - serviceType
+        - services
+
+    CreateServiceResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          example: 2
+        ownerUser_id:
+          type: number
+          format: int32
+          example: 17
+        name:
+          type: string
+          example: 'T-shirt'
+        serviceType:
+          type: number
+          example: 1
+        services:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                format: int32
+                example: 1
+              serviceId:
+                type: number
+                format: int32
+                example: 2
+              name:
+                type: string
+                example: clean
+              price:
+                type: number
+                format: double
+                example: 1.2
+    UpdateServiceRequest:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          example: 2
+        ownerUser_id:
+          type: number
+          format: int32
+          example: 17
+        name:
+          type: string
+          example: 'T-shirt'
+        serviceType:
+          type: number
+          example: 1
+        services:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                format: int32
+                example: 1
+              serviceId:
+                type: number
+                format: int32
+                example: 2
+              name:
+                type: string
+                example: clean
+              price:
+                type: number
+                format: double
+                example: 1.2
+    DeleteServiceResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          example: 2
+        name:
+          type: string
+          example: 'clean'
+        serviceType:
+          type: number
+          example: 1
+        ownerUser_id:
+          type: number
+          format: int32
+          example: 17
+    CreateDeliveryRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        userName:
+          type: string
+          example: userName
+          minLength: 5
+          maxLength: 20
+        password:
+          type: string
+          example: password
+          format: password
+          minLength: 8
+          maxLength: 32
+        relativeType:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        relativeLocation:
+          type: string
+          example: 'location'
+        nationality:
+          type: string
+          example: 'Hindi'
+        vehicleType:
+          type: string
+          example: 'Pickup'
+        vehicleColor:
+          type: string
+          example: 'Yellow'
+        vehicleNumber:
+          type: string
+          example: 'ABC123'
+      required:
+        - phoneNumber
+        - userName
+        - password
+        - relativePhNumber
+        - relativeType
+        - residentLocation
+        - nationality
+        - vehicleType
+        - vehicleColor
+        - vehicleNumber
+    CreateDeliveryResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          example: 1
+        phoneNumber:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        userName:
+          type: string
+          example: userName
+          minLength: 5
+          maxLength: 20
+        password:
+          type: string
+          example: password
+          format: password
+          minLength: 8
+          maxLength: 32
+        relativeType:
+          type: string
+          example: 0123456789
+          maxLength: 10
+          minLength: 10
+        relativeLocation:
+          type: string
+          example: 'location'
+        nationality:
+          type: string
+          example: 'Hindi'
+        vehicleType:
+          type: string
+          example: 'Pickup'
+        vehicleColor:
+          type: string
+          example: 'Yellow'
+        vehicleNumber:
+          type: string
+          example: 'ABC123'       
+        online:
+          type: boolean
+          example: false
+    ChangeOnlineStatusRequest:
+      type: object
+      properties:
+        online:
+          type: number
+          example: 1
+      required:
+        - online
+    ChangeOnlineStatusResponse:
+      type: object
+      properties:
+        online:
+          type: number
+          example: 1
+    BadRequestResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error_code:
+          type: number
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: 'Error #1: Code: invalid_type ~ Path: body.userName ~ Message: userName must bet a string'
+    UnauthorizedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error_code:
+          type: number
+          format: int32
+          example: 401
+        message:
+          type: string
+          example: 'wrong phoneNumber or password'
+
+security:
+  - bearerAuth: []
+tags:
+  - name: Client
+    description: Client Related Endpoints
+paths:
+  /c/client:
+    post:
+      tags:
+        - Client
+      summary: Create new Client
+      description: Add new Client to the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClientResponse'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
+    get:
+      tags:
+        - Client
+      summary: Get Client information
+      description: Returns client object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetClientResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+    put:
+      tags:
+        - Client
+      summary: Update Client information
+      description: update Client data in database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClientRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClientResponse'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+  /c/owner:
+    get:
+      tags:
+        - Client
+      summary: Get owners information
+      description: Retrive a list of owner information from database
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOwnersResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+  /c/auth:
+    post:
+      tags:
+        - Client
+      summary: Create a new Session
+      description: Create a new Client session and return a Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientSessionRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClientSessionResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+  /o/auth:
+    post:
+      tags:
+        - Owner
+      summary: Create a new Session
+      description: Create a new Client session and return a Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientSessionRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClientSessionResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+  /o/owner:
+    post:
+      tags:
+        - Owner
+      summary: Create a new Owner
+      description: Add a new Owner To the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOwnerRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOwnerResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+    get:
+      tags:
+        - Owner
+      summary: Get Owner Information from database
+      description: Get Owner Object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOwnersResponse'
+  /o/service:
+    post:
+      tags:
+        - Owner
+      summary: Add new service
+      description: Add new service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServiceResponse'
+    put:
+      tags:
+        - Owner
+      summary: Update Service
+      description: Update Service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServiceResponse'
+  /o/serivce/{serviceId}:
+    delete:
+      tags:
+        - Owner
+      summary: Delete a service
+      description: Delete a service
+      parameters:
+        - in: path
+          name: serviceId
+          schema:
+            type: number
+            format: int32
+            example: 1
+          required: true
+          description: 'The id of the service'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteServiceResponse'
+  /o/order:
+    get:
+      tags:
+        - Owner
+      summary: Get Owner's Orders
+      description: Get Owner's Orders
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                # TODO FIXME
+                items:
+                  $ref: '#/components/schemas/CreateOrderRequest'
+  /o/order/{orderId}:
+    put:
+      tags:
+        - Owner
+      summary: Update order data
+      description: Update order data
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: number
+            format: int32
+            example: 1
+          required: true
+          description: 'The id of the orderId'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                # TODO FixMe
+                $ref: '#/components/schemas/CreateOrderRequest'
+  /d/delivery:
+    post:
+      tags:
+        - Delivery
+      summary: Add new Delivery to the database
+      description: Add new Delivery to the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeliveryRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDeliveryResponse'
+  /d/auth:
+    post:
+      tags:
+        - Delivery
+      summary: Create a new Session
+      description: Create a new Delivery session and return a Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientSessionRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClientSessionResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+  /d/order:
+    get:
+      tags:
+        - Delivery
+      summary: Get Pending orders
+      description: Get Pending orders
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                # TODO FIXME
+                items:
+                  $ref: '#/components/schemas/CreateOrderRequest'
+  /d/order/me:
+    get:
+      tags:
+        - Delivery
+      summary: Get Delivery's orders
+      description: Get Delivery's orders
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                # TODO FIXME
+                items:
+                  $ref: '#/components/schemas/CreateOrderRequest'
+  /d/delivery/online:
+    put:
+      tags:
+        - Delivery
+      summary: change delivery online
+      description: change delivery online
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOnlineStatusRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDeliveryResponse'
+  /a/delivery:
+    get:
+      tags:
+        - Admin
+      summary: Get Pending Delivery Request
+      description: Get Pending Delivery Request
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+               type: array
+               items:
+                $ref: '#/components/schemas/CreateDeliveryResponse'
+  /a/delivery/{id}:
+    delete:
+      tags:
+        - Admin
+      summary: Update Activated Status
+      description: Update Activated Status
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            format: int32
+            example: 1
+          required: true
+          description: 'The id of the delivery'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteServiceResponse'

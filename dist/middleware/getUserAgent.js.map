@@ -1,0 +1,1 @@
+{"version":3,"file":"getUserAgent.js","sourceRoot":"","sources":["../../src/middleware/getUserAgent.ts"],"names":[],"mappings":";;AACA,SAAwB,YAAY,CAAC,GAAY,EAAE,GAAa,EAAE,IAAkB;;IAClF,GAAG,CAAC,MAAM,CAAC,EAAE,GAAG,MAAA,GAAG,CAAC,GAAG,CAAC,YAAY,CAAC,mCAAI,EAAE,CAAC;IAC5C,IAAI,EAAE,CAAC;AACT,CAAC;AAHD,+BAGC"}
